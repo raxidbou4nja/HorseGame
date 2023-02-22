@@ -8,13 +8,13 @@ class Comptes extends Controller{
     //fetch All user
     public function index(){
         if(isLoggedOut()){
-           return redirect('comptes/login');
+           return redirect('user/login');
         }
         $data = $this->userModel->getComptes();
         $data = [
             'comptes' => $data
         ];
-        $this->view('comptes/liste', $data);
+        $this->view('user/games', $data);
     }
 
     public function register(){
