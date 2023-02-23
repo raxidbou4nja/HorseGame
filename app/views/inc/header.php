@@ -33,6 +33,9 @@
       font-size: 53px;
       font-weight: bolder;
     }
+    .bg-bronze{
+        background-color: #c7a079;
+    }
 
     /*sidebar */
     #wrapper {
@@ -160,7 +163,61 @@ Sidebar Styles */
     }
 }
     
-    */
+/*
+USER REGISTER LOGIN FORM
+*/
+
+form sup {
+    color:red;
+    margin-left: 2px;
+}
+input {
+    border: 1px solid gray;
+}
+
+label {
+    margin-bottom: 16px;
+    font-style:italic;
+    font-weight: bold;
+}
+
+input[type=text]{
+    font-size:14px;
+    font-color: gray;
+    font-style:italic;
+
+}
+
+input[type=password]{
+    font-size:14px;
+    font-color: gray;
+    font-style:italic;
+}
+.register-user-btn{
+    background-color: #b68869;
+}
+
+/* navbar profile */
+
+.profile-navbar{
+    background-color: #c7a079;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    font-family: HP Simplified;
+    font-weight: bold;
+    font-style: italic;
+}
+
+.score-output{
+    background: white;
+    padding: 2px 20px;
+    border-radius: 10px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 85%;
+    width: fit-content;
+    margin-left: 5px;
+}
   </style>
 </head>
 <body>

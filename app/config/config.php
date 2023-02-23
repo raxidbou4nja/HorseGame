@@ -8,7 +8,7 @@
   // App Root
   define('APPROOT', dirname(dirname(__FILE__)));
   // URL Root
-  define('URLROOT', 'http://localhost/projects/mvc');
+  define('URLROOT', 'http://localhost/projects/terssi');
   // Site Name
   define('SITENAME', 'GAME');
   // App Version

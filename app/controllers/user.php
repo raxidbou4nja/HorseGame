@@ -1,5 +1,5 @@
 <?php
-class Comptes extends Controller{
+class User extends Controller{
     public function __construct()
     {
         $this->userModel = $this->model('Compte');
@@ -7,14 +7,14 @@ class Comptes extends Controller{
 
     //fetch All user
     public function index(){
-        if(isLoggedOut()){
-           return redirect('user/login');
-        }
+//        if(isLoggedOut()){
+//           return redirect('user/login');
+//        }
         $data = $this->userModel->getComptes();
         $data = [
             'comptes' => $data
         ];
-        $this->view('user/games', $data);
+        $this->view('user/new_game', $data);
     }
 
     public function register(){
@@ -22,23 +22,23 @@ class Comptes extends Controller{
            // process form
            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING); 
             $data = [
-                'prenom' => trim($_POST['prenom']),
+                'name' => trim($_POST['name']),
                 'nom' => trim($_POST['nom']),
                 'email' => trim($_POST['email']),
                 'tel' => trim($_POST['tel']),
-                'mot_de_passe' => trim($_POST['mot_de_passe']),
-                'confirm_mot_de_passe' => trim($_POST['confirm_mot_de_passe']),
-                'prenom_err' => '',
+                'password' => trim($_POST['password']),
+                'confirm_password' => trim($_POST['confirm_password']),
+                'name_err' => '',
                 'nom_err' => '',
                 'email_err' => '',
                 'tel_err' => '',
-                'mot_de_passe_err' => '',
-                'confirm_mot_de_passe_err' => '' 
+                'password_err' => '',
+                'confirm_password_err' => '' 
             ];
 
             //valide name
-            if(empty($data['prenom'])){
-                $data['prenom_err'] = 'Please enter First Name';
+            if(empty($data['name'])){
+                $data['name_err'] = 'Please enter First Name';
             }
 
             if(empty($data['nom'])){
@@ -59,50 +59,50 @@ class Comptes extends Controller{
                 $data['tel_err'] = 'Please enter your Number Phone';
             }
             //validate password 
-            if(empty($data['mot_de_passe'])){
-                $data['mot_de_passe_err'] = 'Please enter your password';
-            }elseif(strlen($data['mot_de_passe']) < 6){
-                $data['mot_de_passe_err'] = 'Password must be atleast six characters';
+            if(empty($data['password'])){
+                $data['password_err'] = 'Please enter your password';
+            }elseif(strlen($data['password']) < 6){
+                $data['password_err'] = 'Password must be atleast six characters';
             }
 
             //validate confirm password
-            if(empty($data['confirm_mot_de_passe'])){
-                $data['confirm_mot_de_passe_err'] = 'Please confirm password';
+            if(empty($data['confirm_password'])){
+                $data['confirm_password_err'] = 'Please confirm password';
             }else{
-                if($data['mot_de_passe'] != $data['confirm_mot_de_passe'])
+                if($data['password'] != $data['confirm_password'])
                 {
-                    $data['confirm_mot_de_passe_err'] = 'Password does not match';
+                    $data['confirm_password_err'] = 'Password does not match';
                 }
             }
 
             //make sure error are empty
-            if(empty($data['prenom_err']) && empty($data['nom_err']) && empty($data['email_err']) && empty($data['tel_err']) && empty($data['mot_de_passe_err']) && empty($data['comfirm_mot_de_passe_err'])){
-                $data['mot_de_passe'] = $data['mot_de_passe'];
+            if(empty($data['name_err']) && empty($data['nom_err']) && empty($data['email_err']) && empty($data['tel_err']) && empty($data['password_err']) && empty($data['comfirm_password_err'])){
+                $data['password'] = $data['password'];
                 if($this->userModel->register($data)){
                     flash('register_success', 'you are registerd you can login now');
-                    redirect('comptes/login');
+                    redirect('user/login');
                 }
             }else{
-                $this->view('comptes/register', $data);
+                $this->view('user/register', $data);
             }
         }else{
             //init data
             $data = [
-                'prenom' => '',
+                'name' => '',
                 'nom' => '',
                 'email' => '',
                 'tel' => '',
-                'mot_de_passe' => '',
-                'confirm_mot_de_passe' => '',
-                'prenom_err' => '',
+                'password' => '',
+                'confirm_password' => '',
+                'name_err' => '',
                 'nom_err' => '',
                 'email_err' => '',
                 'tel_err' => '',
-                'mot_de_passe_err' => '',
-                'confirm_mot_de_passe_err' => '' 
+                'password_err' => '',
+                'confirm_password_err' => '' 
             ];
             //load view
-            $this->view('comptes/register', $data);          
+            $this->view('user/register', $data);          
         }
     }
 
@@ -110,29 +110,29 @@ class Comptes extends Controller{
 
     public function add(){
         if(isLoggedOut()){
-           return redirect('comptes/login');
+           return redirect('user/login');
         }
         if ($_SERVER['REQUEST_METHOD'] == 'POST'){
            // process form
            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING); 
             $data = [
-                'prenom' => trim($_POST['prenom']),
+                'name' => trim($_POST['name']),
                 'nom' => trim($_POST['nom']),
                 'email' => trim($_POST['email']),
                 'tel' => trim($_POST['tel']),
-                'mot_de_passe' => trim($_POST['mot_de_passe']),
-                'confirm_mot_de_passe' => trim($_POST['confirm_mot_de_passe']),
-                'prenom_err' => '',
+                'password' => trim($_POST['password']),
+                'confirm_password' => trim($_POST['confirm_password']),
+                'name_err' => '',
                 'nom_err' => '',
                 'email_err' => '',
                 'tel_err' => '',
-                'mot_de_passe_err' => '',
-                'confirm_mot_de_passe_err' => '' 
+                'password_err' => '',
+                'confirm_password_err' => '' 
             ];
 
             //valide name
-            if(empty($data['prenom'])){
-                $data['prenom_err'] = 'Please enter First Name';
+            if(empty($data['name'])){
+                $data['name_err'] = 'Please enter First Name';
             }
 
             if(empty($data['nom'])){
@@ -153,50 +153,50 @@ class Comptes extends Controller{
                 $data['tel_err'] = 'Please enter your Number Phone';
             }
             //validate password 
-            if(empty($data['mot_de_passe'])){
-                $data['mot_de_passe_err'] = 'Please enter your password';
-            }elseif(strlen($data['mot_de_passe']) < 6){
-                $data['mot_de_passe_err'] = 'Password must be atleast six characters';
+            if(empty($data['password'])){
+                $data['password_err'] = 'Please enter your password';
+            }elseif(strlen($data['password']) < 6){
+                $data['password_err'] = 'Password must be atleast six characters';
             }
 
             //validate confirm password
-            if(empty($data['confirm_mot_de_passe'])){
-                $data['confirm_mot_de_passe_err'] = 'Please confirm password';
+            if(empty($data['confirm_password'])){
+                $data['confirm_password_err'] = 'Please confirm password';
             }else{
-                if($data['mot_de_passe'] != $data['confirm_mot_de_passe'])
+                if($data['password'] != $data['confirm_password'])
                 {
-                    $data['confirm_mot_de_passe_err'] = 'Password does not match';
+                    $data['confirm_password_err'] = 'Password does not match';
                 }
             }
 
             //make sure error are empty
-            if(empty($data['prenom_err']) && empty($data['nom_err']) && empty($data['email_err']) && empty($data['tel_err']) && empty($data['mot_de_passe_err']) && empty($data['comfirm_mot_de_passe_err'])){
-                $data['mot_de_passe'] = $data['mot_de_passe'];
+            if(empty($data['name_err']) && empty($data['nom_err']) && empty($data['email_err']) && empty($data['tel_err']) && empty($data['password_err']) && empty($data['comfirm_password_err'])){
+                $data['password'] = $data['password'];
                 if($this->userModel->register($data)){
                     flash('account_message', 'New account Has Been Added');
-                    redirect('comptes/index');
+                    redirect('user/index');
                 }
             }else{
-                $this->view('comptes/add', $data);
+                $this->view('user/add', $data);
             }
         }else{
             //init data
             $data = [
-                'prenom' => '',
+                'name' => '',
                 'nom' => '',
                 'email' => '',
                 'tel' => '',
-                'mot_de_passe' => '',
-                'confirm_mot_de_passe' => '',
-                'prenom_err' => '',
+                'password' => '',
+                'confirm_password' => '',
+                'name_err' => '',
                 'nom_err' => '',
                 'email_err' => '',
                 'tel_err' => '',
-                'mot_de_passe_err' => '',
-                'confirm_mot_de_passe_err' => '' 
+                'password_err' => '',
+                'confirm_password_err' => '' 
             ];
             //load view
-            $this->view('comptes/add', $data);          
+            $this->view('user/add', $data);          
         }
     }
 
@@ -204,28 +204,28 @@ class Comptes extends Controller{
     public function edit($id){
 
         if(isLoggedOut()){
-           return redirect('comptes/login');
+           return redirect('user/login');
         }
                if ($_SERVER['REQUEST_METHOD'] == 'POST'){
            // process form
            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING); 
             $data = [
-                'prenom' => trim($_POST['prenom']),
+                'name' => trim($_POST['name']),
                 'nom' => trim($_POST['nom']),
                 'email' => trim($_POST['email']),
                 'tel' => trim($_POST['tel']),
                 'etat' => trim($_POST['etat']),
-                'mot_de_passe' => trim($_POST['mot_de_passe']),
-                'prenom_err' => '',
+                'password' => trim($_POST['password']),
+                'name_err' => '',
                 'nom_err' => '',
                 'email_err' => '',
                 'tel_err' => '',
-                'mot_de_passe_err' => ''
+                'password_err' => ''
             ];
 
             //valide name
-            if(empty($data['prenom'])){
-                $data['prenom_err'] = 'Please enter First Name';
+            if(empty($data['name'])){
+                $data['name_err'] = 'Please enter First Name';
             }
 
             if(empty($data['nom'])){
@@ -246,44 +246,44 @@ class Comptes extends Controller{
                 $data['tel_err'] = 'Please enter your Number Phone';
             }
             //validate password 
-            if(empty($data['mot_de_passe'])){
-                $data['mot_de_passe_err'] = 'Please enter your password';
-            }elseif(strlen($data['mot_de_passe']) < 6){
-                $data['mot_de_passe_err'] = 'Password must be atleast six characters';
+            if(empty($data['password'])){
+                $data['password_err'] = 'Please enter your password';
+            }elseif(strlen($data['password']) < 6){
+                $data['password_err'] = 'Password must be atleast six characters';
             }
 
             //make sure error are empty
-            if(empty($data['prenom_err']) && empty($data['nom_err']) && empty($data['email_err']) && empty($data['tel_err']) && empty($data['mot_de_passe_err']) ){
-                $data['mot_de_passe'] = $data['mot_de_passe'];
+            if(empty($data['name_err']) && empty($data['nom_err']) && empty($data['email_err']) && empty($data['tel_err']) && empty($data['password_err']) ){
+                $data['password'] = $data['password'];
 
                 if($this->userModel->updateCompte($data,$id)){
                     flash('account_message', $data['nom']."'s ".'Account Has Been Updated.');
-                    redirect('comptes/index');
+                    redirect('user/index');
                 }
             }else{
-                $this->view('comptes/edit', $data);
+                $this->view('user/edit', $data);
             }
         }else{
            $info = $this->userModel->getUserById($id);
            $data = [
                 'id' => $info->id,
-                'prenom' => $info->prenom,
+                'name' => $info->name,
                 'nom' => $info->nom,
                 'email' => $info->email,
                 'tel' => $info->tel,
                 'etat' => $info->etat,
-                'mot_de_passe' => $info->mot_de_passe,
-                'confirm_mot_de_passe' => $info->mot_de_passe,
-                'prenom_err' => '',
+                'password' => $info->password,
+                'confirm_password' => $info->password,
+                'name_err' => '',
                 'nom_err' => '',
                 'email_err' => '',
                 'tel_err' => '',
-                'mot_de_passe_err' => '',
-                'confirm_mot_de_passe_err' => '',
+                'password_err' => '',
+                'confirm_password_err' => '',
                 'etat_err' => ''
 
             ];
-            $this->view('comptes/edit', $data);
+            $this->view('user/edit', $data);
         }
     }
 
@@ -294,9 +294,9 @@ class Comptes extends Controller{
            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING); 
            $data = [
                'email' => trim($_POST['email']),
-               'mot_de_passe' => trim($_POST['mot_de_passe']),
+               'password' => trim($_POST['password']),
                'email_err' => '',
-               'mot_de_passe_err' => ''
+               'password_err' => ''
            ];
 
             //validate email
@@ -311,36 +311,36 @@ class Comptes extends Controller{
             }
 
             //validate password 
-            if(empty($data['mot_de_passe'])){
-                $data['mot_de_passe_err'] = 'Please enter your password';
-            }elseif(strlen($data['mot_de_passe']) < 6){
-                $data['mot_de_passe_err'] = 'Password must be atleast six characters';
+            if(empty($data['password'])){
+                $data['password_err'] = 'Please enter your password';
+            }elseif(strlen($data['password']) < 6){
+                $data['password_err'] = 'Password must be atleast six characters';
             }
             
             //make sure error are empty
-            if(empty($data['email_err']) && empty($data['mot_de_passe_err'])){
-                $loggedInUser = $this->userModel->login($data['email'], $data['mot_de_passe']);
+            if(empty($data['email_err']) && empty($data['password_err'])){
+                $loggedInUser = $this->userModel->login($data['email'], $data['password']);
                 if($loggedInUser){
                     //create session
                     $this->createUserSession($loggedInUser);
                 }else{
-                    $data['mot_de_passe_err'] = 'Password incorrect';
-                    $this->view('Comptes/login', $data);
+                    $data['password_err'] = 'Password incorrect';
+                    $this->view('user/login', $data);
                 }
             }else{
-                $this->view('Comptes/login', $data);
+                $this->view('user/login', $data);
             }
 
         }else{
             //init data f f
             $data = [
                 'email' => '',
-                'mot_de_passe' => '',
+                'password' => '',
                 'email_err' => '',
-                'mot_de_passe_err' => ''
+                'password_err' => ''
             ];
             //load view
-            $this->view('Comptes/login', $data);          
+            $this->view('user/login', $data);          
         }
     }
 
@@ -348,14 +348,14 @@ class Comptes extends Controller{
     //fetch All user
     public function deleteCompte($id){
         if(isLoggedOut()){
-           return redirect('comptes/login');
+           return redirect('user/login');
         }
         
         if($this->userModel->SoftDeleteCompte($id)){
                     flash('account_message', $id."'s ".'Account Has Been Deleted.');
-                    redirect('comptes/index');
+                    redirect('user/index');
                 }else{
-                    redirect('comptes/index');
+                    redirect('user/index');
                 }
     }
 
@@ -364,7 +364,7 @@ class Comptes extends Controller{
         $_SESSION['user_id'] = $user->id;
         $_SESSION['name'] = $user->name;
         $_SESSION['email'] = $user->email;
-        redirect('comptes/index');
+        redirect('user/index');
     }
 
     //logout and destroy user session
@@ -373,6 +373,6 @@ class Comptes extends Controller{
         unset($_SESSION['name']);
         unset($_SESSION['email']);
         session_destroy();
-        redirect('comptes/login');
+        redirect('user/login');
     }
 }

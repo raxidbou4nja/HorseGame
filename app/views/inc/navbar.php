@@ -10,10 +10,10 @@
        <div id="sidebar-wrapper">
             <ul class="sidebar-nav">
                 <li>
-                    <a href="<?php echo URLROOT; ?>/login">Login</a>
+                    <a href="<?php echo URLROOT; ?>/user/login">Login</a>
                 </li>
                 <li>
-                    <a href="<?php echo URLROOT; ?>/register">Registration</a>
+                    <a href="<?php echo URLROOT; ?>/user/register">Registration</a>
                 </li>
             </ul>
         </div>

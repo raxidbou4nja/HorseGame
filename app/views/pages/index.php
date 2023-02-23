@@ -10,8 +10,8 @@
     				<img src="img/index2.png" width="50%">
     			</div>
     			<div class="font-italic mt-2">
-    				<a href="<?php echo URLROOT; ?>/register" class="btn-font-bronze m-2">Register</a>
-    				<a href="<?php echo URLROOT; ?>/login" class="btn-font-bronze m-2">Login</a>
+    				<a href="<?php echo URLROOT; ?>/user/register" class="btn-font-bronze m-2">Register</a>
+    				<a href="<?php echo URLROOT; ?>/user/login" class="btn-font-bronze m-2">Login</a>
     			</div>
     		</div>
     	</div>
