@@ -5,7 +5,7 @@
 
 
 		function random_numbers($limit){
-			$random_number_array = range(1, 20);
+			$random_number_array = range(1, 10);
 			shuffle($random_number_array );
 			$random_number_array = array_slice($random_number_array ,0,$limit);
 			return $random_number_array;
@@ -14,9 +14,9 @@
 		function result_diff($array1,$array2){
 
 			$show_result = "";
-			foreach($array1 as $check_win)
+			foreach($array2 as $check_win)
 			{
-				if(in_array($check_win, $array2))
+				if(in_array($check_win, $array1))
 				{
 					$show_result .= "<div class='h2 bg-success'>".$check_win."</div>";
 				}
@@ -28,6 +28,34 @@
 
 			return $show_result;
 		}
+
+
+		function getSolved($array1,$array2){
+
+			$show_result = "";
+			foreach($array2 as $check_win)
+			{
+				if(in_array($check_win, $array1))
+				{
+					$show_result .= "<div class='h2 bg-success'>".$check_win."</div>";
+				}
+			}
+
+			return $show_result;
+		}
+
+
+		function result_div($array){
+			$array = json_decode($array,true);
+			$show_result = "";
+			foreach($array as $check_win)
+			{
+					$show_result .= "<div class='h2 bg-success'>".$check_win."</div>";
+			}
+
+			return $show_result;
+		}
+
 
 		function string_to_json($string){
 			$json = json_encode(explode(',',rtrim(@$string,',')));

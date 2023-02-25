@@ -3,7 +3,7 @@ class Tickets extends Controller{
     public function __construct()
     {
         $this->userModel = $this->model('User');
-        $this->ticketModel = $this->model('ticket');
+        $this->ticketModel = $this->model('Ticket');
     }
 
     //fetch All user
@@ -19,19 +19,23 @@ class Tickets extends Controller{
 
 
     //fetch All user
-    public function winners($winners = null){
+    public function winners($winners){
        if(isLoggedOut()){
           return redirect('users/login');
       }
 
-        $winners = $this->ticketModel->getTicketsByWinners($winners);
-        if (!$winners) {
+        $winners_tickets = $this->ticketModel->getTicketsByWinners($winners);
+        if (!$winners_tickets) {
           return redirect('users');
         }
 
+        $available = $this->ticketModel->countTicketsByWinners($winners);
+        $last_ticket = $this->ticketModel->getLastTicketByWinners($winners);
+        $history_tickets = $this->ticketModel->getHistoryTicketsByWinners($winners);
+
         $info = $this->userModel->getUserById($_SESSION['user_id']);
         //$info = ['articles' => $winners, 'data' => $data ];
-        $this->view('ticket/winners', ['info' => $info, 'winners' => $winners]);
+        $this->view('ticket/winners', ['info' => $info, 'winners' => $winners_tickets, 'available' => $available, 'last_ticket' => $last_ticket, 'historyTickets' => $history_tickets]);
     }
 
 
@@ -78,10 +82,17 @@ class Tickets extends Controller{
            echo $text;
           return false;
         }
+
+
         $this->userModel->updateUserCredit($cost, $_SESSION['user_id']);
 
+        $random_result = json_encode(random_numbers($winners));
+        //// Give a unique Pack Number
+
+        $pack_serial = time();
+
         for ($i=0; $i < $pack; $i++) { 
-            if (!$this->ticketModel->purchaseTickets($_POST['winners'])) {
+            if (!$this->ticketModel->purchaseTickets($_POST['winners'],$random_result,$pack_serial)) {
               return false;
             }
         }
@@ -138,7 +149,7 @@ class Tickets extends Controller{
 
            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
            /// GENERATE A SET OF NUMBERS 
-           $random_result = json_encode(random_numbers($ticket->winners));
+           $random_result = $ticket->result;
            // GET SUBMITTED NUMBERS
            $submitted_numbers = string_to_json(@$_POST['numbers']);
 
@@ -179,13 +190,13 @@ class Tickets extends Controller{
 
           if ($submitted_numbers_array == $random_result_array) {
             $sql_status = 'O'; /// MEANS 'ORDER'
-            $prize = $ticket->winners*1000;
+            $prize = $ticket->winners*100;
             $this->userModel->updateUserCredit($prize,$_SESSION['user_id']);
             $this->userModel->updateUserLevel(+80,$_SESSION['user_id']);
           }
           else if (count($arrays_diff) == $ticket->winners)  {
             $sql_status = 'D'; /// MEANS 'DESORDER'
-            $prize = $ticket->winners*500;
+            $prize = $ticket->winners*50;
             $this->userModel->updateUserCredit($prize,$_SESSION['user_id']);
             $this->userModel->updateUserLevel(+20,$_SESSION['user_id']);
           }

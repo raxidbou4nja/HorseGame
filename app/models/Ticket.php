@@ -30,10 +30,12 @@ class Ticket {
     }
 
     //register new user
-    public function purchaseTickets($winners){
-        $this->db->query('INSERT INTO tickets (userid, winners) VALUES (:userid,:winners)');
+    public function purchaseTickets($winners,$result, $pack){
+        $this->db->query('INSERT INTO tickets (userid, winners, result, pack) VALUES (:userid,:winners, :result, :pack)');
         $this->db->bind(':userid', $_SESSION['user_id']);
         $this->db->bind(':winners', $winners);
+        $this->db->bind(':result', $result);
+        $this->db->bind(':pack', $pack);
 
         if($this->db->execute()){
             return true;
@@ -151,7 +153,7 @@ class Ticket {
 
     public function getTicketsByWinners($winners){
 
-        $this->db->query('SELECT * FROM tickets WHERE winners = :winners AND userid = :userid ORDER BY status ASC,id DESC LIMIT 15');
+        $this->db->query('SELECT * FROM tickets WHERE winners = :winners AND userid = :userid ORDER BY status ASC LIMIT 5');
         $this->db->bind(':winners', $winners);
         $this->db->bind(':userid', $_SESSION['user_id']);
 
@@ -163,6 +165,48 @@ class Ticket {
             return false;
         }
     }
+
+    public function getHistoryTicketsByWinners($winners){
+
+        $this->db->query('SELECT * FROM tickets WHERE winners = :winners AND userid = :userid ORDER BY status ASC LIMIT 5');
+        $this->db->bind(':winners', $winners);
+        $this->db->bind(':userid', $_SESSION['user_id']);
+
+        $result = $this->db->resultSet();
+
+        if($this->db->rowCount() > 0){
+            return $result;
+        }else{
+            return false;
+        }
+    }
+
+
+    public function getLastTicketByWinners($winners){
+
+        $this->db->query('SELECT * FROM tickets WHERE winners = :winners AND userid = :userid ORDER BY id DESC LIMIT 1');
+        $this->db->bind(':winners', $winners);
+        $this->db->bind(':userid', $_SESSION['user_id']);
+
+        $result = $this->db->single();
+
+        if($this->db->rowCount() > 0){
+            return $result;
+        }else{
+            return false;
+        }
+    }
+
+
+    public function countTicketsByWinners($winners){
+        $this->db->query('SELECT * FROM tickets WHERE winners = :winners AND userid = :userid AND  status IS NULL');
+        $this->db->bind(':winners', $winners);
+        $this->db->bind(':userid', $_SESSION['user_id']);
+        $this->db->single();
+        return $this->db->rowCount();
+
+    }
+
 
     public function getTicketByWinners($winners){
         $this->db->query('SELECT * FROM tickets WHERE winners = :winners AND status IS NULL');
