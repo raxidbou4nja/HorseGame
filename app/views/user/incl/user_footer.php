@@ -6,12 +6,5 @@
   <script src="<?php echo URLROOT; ?>/js/fontawesome.min.js"></script>
 
 <script>
-
   var rootPath = "<?php echo URLROOT; ?>";
-
-
-
-
 </script>
-</body>
-</html>

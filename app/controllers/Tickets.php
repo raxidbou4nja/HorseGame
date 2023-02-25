@@ -1,0 +1,224 @@
+<?php
+class Tickets extends Controller{
+    public function __construct()
+    {
+        $this->userModel = $this->model('User');
+        $this->ticketModel = $this->model('ticket');
+    }
+
+    //fetch All user
+    public function index(){
+       if(isLoggedOut()){
+          return redirect('users/login');
+      }
+          // Redirect To games Page;
+          return redirect('users');
+
+    }
+
+
+
+    //fetch All user
+    public function winners($winners = null){
+       if(isLoggedOut()){
+          return redirect('users/login');
+      }
+
+        $winners = $this->ticketModel->getTicketsByWinners($winners);
+        if (!$winners) {
+          return redirect('users');
+        }
+
+        $info = $this->userModel->getUserById($_SESSION['user_id']);
+        //$info = ['articles' => $winners, 'data' => $data ];
+        $this->view('ticket/winners', ['info' => $info, 'winners' => $winners]);
+    }
+
+
+    public function buyTickets(){
+       
+      if(isLoggedOut())
+      {
+          return redirect('users/login');
+      }
+
+      if ($_SERVER['REQUEST_METHOD'] == 'POST')
+      {
+        if ($_SERVER['HTTP_REFERER'] != current_url()) 
+
+        $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING); 
+
+        $user = $this->userModel->getUserById($_SESSION['user_id']);
+
+        $winners = $this->ticketModel->getAvailableTicketsByWinners($_POST['winners']);
+
+        if ($winners) 
+        {
+          return false;
+        }
+
+        $winners = (int) $_POST['winners'];
+        $pack =  (int) $_POST['pack'];
+        //$info = $this->userModel->getUserById($_SESSION['user_id']);
+
+        if ($winners < 1 || $winners > 5 || empty($winners)) {
+          return false;
+        }
+
+        if ($pack < 3 || $pack > 5 || empty($pack)) {
+          return false;
+        }
+
+        $cost = -$winners*$pack;
+
+
+        if ($user->score < $winners*$pack) {
+           $text = '<div class="h4 mb-1 alert alert-danger">You Don\'t Have Enough money</div>' ;
+           $text .=  '<a type="submit" href="'.URLROOT.'/users/deposit" class="play-btn mt-3 text-dark">Deposit Money</a>';
+           echo $text;
+          return false;
+        }
+        $this->userModel->updateUserCredit($cost, $_SESSION['user_id']);
+
+        for ($i=0; $i < $pack; $i++) { 
+            if (!$this->ticketModel->purchaseTickets($_POST['winners'])) {
+              return false;
+            }
+        }
+
+           $text = '<div class="h3 mb-1">You Have Tickets</div>' ;
+           $text .= '<div class="h2">'.$pack.'</div>' ;
+           $text .=  '<a type="submit" href="'.URLROOT.'/tickets/winners/'.@$_POST['winners'].'" class="play-btn mt-3 text-dark">Try You Chance</a>';
+           echo $text;
+        
+    }
+  }
+
+
+    //fetch All user
+    public function checkAvailableWinners(){
+        
+        if(isLoggedOut()){
+           return redirect('users/login');
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST'){
+           
+        $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING); 
+        
+        if($num_of_tickets = $this->ticketModel->getAvailableTicketsByWinners(@$_POST['winners'])){
+           $text = '<div class="h3 mb-1">You Have Tickets</div>' ;
+           $text .= '<div class="h2">'.$num_of_tickets.'</div>' ;
+           $text .=  '<a type="submit" href="'.URLROOT.'/tickets/winners/'.@$_POST['winners'].'" class="play-btn mt-3 text-dark">Try You Chance</a>';
+           echo $text;
+         }
+     }
+    }
+
+    //setting user section variable
+    public function playTicket(){
+        if(isLoggedOut()){
+           return redirect('users/login');
+        }
+        /// DECLARING MESSAGE OF RESULT
+        $message['error'] = "";
+        $message['result'] = "";
+        $message['status'] = "";
+        $message['sound'] = "";
+
+        // DETECT POST METHOD
+        if ($_SERVER['REQUEST_METHOD'] == 'POST'){
+
+         $ticket = $this->ticketModel->findAvailableTicketsByNumber(@$_POST['num']);
+
+        if(!$ticket)
+        {
+          return false;
+        }
+
+           $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+           /// GENERATE A SET OF NUMBERS 
+           $random_result = json_encode(random_numbers($ticket->winners));
+           // GET SUBMITTED NUMBERS
+           $submitted_numbers = string_to_json(@$_POST['numbers']);
+
+           // MAKE THEM ARRAY AND CHECK SUBMITTED NUMBERS
+          $submitted_numbers_array = json_decode($submitted_numbers,true);
+
+
+
+          if(check_duplicate($submitted_numbers_array)){
+            $message['error'] = "You Inserted Duplicated Number!";
+            echo json_encode($message);
+            return false;
+          }
+
+          if(!check_ints($submitted_numbers_array)){
+            $message['error'] = "Use Numbers Between 1 until 20!";
+            echo json_encode($message);
+            return false;
+          }
+
+          if(!check_ints($submitted_numbers_array)){
+            $message['error'] = "Use Only Numbers Between 1 until 20!";
+            echo json_encode($message);
+            return false;
+          }
+          if(check_range($submitted_numbers_array)){
+            $message['error'] = "Use Numbers Between 1 until 20!";
+            echo json_encode($message);
+            return false;
+          }
+
+
+
+          $random_result_array = json_decode($random_result,true);
+
+          $arrays_diff = array_intersect($submitted_numbers_array, $random_result_array);
+
+
+          if ($submitted_numbers_array == $random_result_array) {
+            $sql_status = 'O'; /// MEANS 'ORDER'
+            $prize = $ticket->winners*1000;
+            $this->userModel->updateUserCredit($prize,$_SESSION['user_id']);
+            $this->userModel->updateUserLevel(+80,$_SESSION['user_id']);
+          }
+          else if (count($arrays_diff) == $ticket->winners)  {
+            $sql_status = 'D'; /// MEANS 'DESORDER'
+            $prize = $ticket->winners*500;
+            $this->userModel->updateUserCredit($prize,$_SESSION['user_id']);
+            $this->userModel->updateUserLevel(+20,$_SESSION['user_id']);
+          }
+          else {
+            $sql_status = 'L'; /// MEANS 'LOSS'
+            $this->userModel->updateUserLevel(+1,$_SESSION['user_id']);
+          }
+
+          // Return Status alert abbr_status('L' OR 'O' OR 'D')
+          $status = abbr_status($sql_status);
+
+          $show_result = result_diff($random_result_array,$submitted_numbers_array);
+          foreach($submitted_numbers_array as $check_win)
+          {
+
+          }
+
+            $message['result'] = $show_result;
+            $message['status'] = $status;
+            $message['sound'] =  $sql_status;
+
+         }
+
+
+          echo json_encode($message);
+
+
+        if(!$this->ticketModel->updateTicket(@$submitted_numbers,@$_POST['num'],$random_result,$sql_status))
+        {
+
+          $message['error'] = "ERROR 404";
+          return json_encode($message);
+        }
+    }
+
+}

@@ -1,23 +1,22 @@
 <div class="container" >  
-    <nav class="navbar mb-3 d-flex justify-content-start h1 bronze-color" id="brandhead">
-      <div class="font-italic">
-        <i class="fa fa-bars mr-1" id="sidebar_button"></i>
-        <a href="<?php echo URLROOT; ?>" class="bronze-color"><?php echo SITENAME; ?></a>
-      </div>
-      </nav>
-       <!-- Sidebar -->
-       <div id="wrapper" class="toggled font-italic">
-       <div id="sidebar-wrapper">
-            <ul class="sidebar-nav">
-                <li>
-                    <a href="<?php echo URLROOT; ?>/user/login">Login</a>
-                </li>
-                <li>
-                    <a href="<?php echo URLROOT; ?>/user/register">Registration</a>
-                </li>
-            </ul>
-        </div>
-        <!-- /#sidebar-wrapper -->
-       </div>
+    <style>
+
+    </style>
+  <div class="header"></div>
+  <input type="checkbox" class="openSidebarMenu" id="openSidebarMenu">
+  <label for="openSidebarMenu" class="sidebarIconToggle">
+        <div class="spinner diagonal part-1"></div>
+        <div class="spinner horizontal"></div>
+        <div class="spinner diagonal part-2"></div>
+      <div class="brand">GAME</div>
+  </label>
+  
+  <div id="sidebarMenu">
+    <ul class="sidebarMenuInner">
+      <li style="height: 100px;"></li>
+      <li><a href="<?php echo URLROOT; ?>/users/login"><i class="fa fa-sign-in"></i> Login</a></li>
+      <li><a href="<?php echo URLROOT; ?>/users/register"><i class="fa fa-user-plus "></i> Register</a></li>
+    </ul>
+  </div>
        
 </div>
