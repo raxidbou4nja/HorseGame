@@ -140,9 +140,9 @@ class Tickets extends Controller{
         // DETECT POST METHOD
         if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 
-         $ticket = $this->ticketModel->findAvailableTicketsByNumber(@$_POST['num']);
+         $ticket = $this->ticketModel->findAvailableTicketByNumber(@$_POST['num']);
 
-        if(!$ticket)
+        if (!$ticket)
         {
           return false;
         }

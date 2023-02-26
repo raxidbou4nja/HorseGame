@@ -24,6 +24,7 @@
     margin-left: auto;
     margin-right: auto;
     font-size: 50px;
+    border-radius: 20px;
 }
 
 #win_alert{
@@ -198,7 +199,7 @@
           ?>
           <div class="col-md-5 m-4" style="border: 3px solid #6c757d;">
             <div class="font-weight-bold prize-head mb-2" style="background: #6c757d; margin: -18px auto">
-              Course #<?php echo $pack_serial; ?>
+              Round #<?php echo $pack_serial; ?>
             </div>
               <div class="ticket-result col-md-11 text-center row justify-content-center mt-2 m-auto p-2 shadow-sm">
                 <?php echo result_div($pack_history_result) ?>

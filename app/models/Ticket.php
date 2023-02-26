@@ -6,30 +6,8 @@ class Ticket {
         $this->db = new Database;
     }
 
-    public function getUsers(){
-        $this->db->query('SELECT *
-                            FROM users 
-                            WHERE deleted_at IS NUll
-                            ORDER BY created_at DESC');
-        $result = $this->db->resultSet();
-        return $result;
-    }
 
-    //register new user
-    public function register($data){
-        $this->db->query('INSERT INTO users (name, email, password, created_at) VALUES (:name, :email, :password, now())');
-        $this->db->bind(':name', $data['name']);
-        $this->db->bind(':email', $data['email']);
-        $this->db->bind(':password', $data['password']);
-
-        if($this->db->execute()){
-            return true;
-        }else{
-            return false;
-        }
-    }
-
-    //register new user
+    //PURCHASE A TICKET OR MORE TICKETS
     public function purchaseTickets($winners,$result, $pack_serial, $pack){
         $this->db->query('INSERT INTO tickets (userid, winners, result, pack_serial, pack) VALUES (:userid,:winners, :result, :pack_serial, :pack)');
         $this->db->bind(':userid', $_SESSION['user_id']);
@@ -44,9 +22,10 @@ class Ticket {
             return false;
         }
     }
+
     public function updateTicket($numbers, $num,$result,$status){
 
-        $this->db->query('UPDATE tickets SET numbers = :numbers,result = :result,status = :status WHERE userid = :userid AND id = :id AND status IS NULL');
+        $this->db->query('UPDATE tickets SET numbers = :numbers, result = :result, status = :status WHERE userid = :userid AND id = :id AND status IS NULL');
 
         $this->db->bind(':numbers', $numbers);
         $this->db->bind(':status', $status);
@@ -91,20 +70,7 @@ class Ticket {
             return false;
         }
     }
-    public function login($email, $password){
-        $this->db->query('SELECT * FROM users where email = :email');
-        $this->db->bind(':email', $email);
-       
-        $row = $this->db->single();
 
-        $db_password = $row->password;
-
-        if($password == $db_password){
-            return $row;
-        }else{
-            return false;
-        }
-    }
 
 
     public function findTicketsByNumber($id){
@@ -122,7 +88,7 @@ class Ticket {
         }
     }
 
-    public function findAvailableTicketsByNumber($id){
+    public function findAvailableTicketByNumber($id){
 
         $this->db->query('SELECT * FROM tickets WHERE id = :id AND userid = :userid AND status IS NULL');
         $this->db->bind(':id', $id);
@@ -210,8 +176,9 @@ class Ticket {
 
 
     public function getTicketByWinners($winners){
-        $this->db->query('SELECT * FROM tickets WHERE winners = :winners AND status IS NULL');
+        $this->db->query('SELECT * FROM tickets WHERE winners = :winners AND userid = :userid AND status IS NULL');
         $this->db->bind(':winners', $winners);
+        $this->db->bind(':userid', $_SESSION['user_id']);
         $this->db->single();
         return $this->db->rowCount();
 
@@ -231,18 +198,6 @@ class Ticket {
         }
         }
 
-    //delete a Compte
-    public function SoftDeleteUser($id){
-        $this->db->query('UPDATE users SET deleted_at = now() WHERE id = :id');
-        $this->db->bind(':id', $id);
-
-        if($this->db->execute()){
-            return true;
-        }else{
-            return false;
-        }
-
-}
 
 
 }
