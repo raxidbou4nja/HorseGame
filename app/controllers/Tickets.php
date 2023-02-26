@@ -92,7 +92,7 @@ class Tickets extends Controller{
         $pack_serial = time();
 
         for ($i=0; $i < $pack; $i++) { 
-            if (!$this->ticketModel->purchaseTickets($_POST['winners'],$random_result,$pack_serial)) {
+            if (!$this->ticketModel->purchaseTickets($_POST['winners'],$random_result,$pack_serial,$pack)) {
               return false;
             }
         }
@@ -165,18 +165,19 @@ class Tickets extends Controller{
           }
 
           if(!check_ints($submitted_numbers_array)){
-            $message['error'] = "Use Numbers Between 1 until 20!";
+            $message['error'] = "Use Numbers Between 1 until ".HORSES_NUMBERS_LIMIT."!";
             echo json_encode($message);
             return false;
           }
 
           if(!check_ints($submitted_numbers_array)){
-            $message['error'] = "Use Only Numbers Between 1 until 20!";
+            $message['error'] = "Use Only Numbers Between 1 until ".HORSES_NUMBERS_LIMIT."!";
             echo json_encode($message);
             return false;
           }
+
           if(check_range($submitted_numbers_array)){
-            $message['error'] = "Use Numbers Between 1 until 20!";
+            $message['error'] = "Use Numbers Between 1 until ".HORSES_NUMBERS_LIMIT."!";
             echo json_encode($message);
             return false;
           }
@@ -200,29 +201,73 @@ class Tickets extends Controller{
             $this->userModel->updateUserCredit($prize,$_SESSION['user_id']);
             $this->userModel->updateUserLevel(+20,$_SESSION['user_id']);
           }
-          else {
+          else if ($ticket->winners > 4 AND count($arrays_diff) > 4) {
+
+            $sql_status = 'B'; /// MEANS 'BONUS'
+            $prize = $ticket->winners*4;
+            $this->userModel->updateUserCredit($prize,$_SESSION['user_id']);
+            $this->userModel->updateUserLevel(+10,$_SESSION['user_id']);
+
+
+          } 
+          else if ($ticket->winners > 3 AND count($arrays_diff) > 3) {
+
+            $sql_status = 'B'; /// MEANS 'BONUS'
+            $prize = $ticket->winners*3;
+            $this->userModel->updateUserCredit($prize,$_SESSION['user_id']);
+            $this->userModel->updateUserLevel(+5,$_SESSION['user_id']);
+
+          } 
+          else if ($ticket->winners > 2 AND count($arrays_diff) > 2) {
+
+            $sql_status = 'B'; /// MEANS 'BONUS'
+            $prize = $ticket->winners*2;
+            $this->userModel->updateUserCredit($prize,$_SESSION['user_id']);
+            $this->userModel->updateUserLevel(+2,$_SESSION['user_id']);
+
+          } 
+          else
+          {
             $sql_status = 'L'; /// MEANS 'LOSS'
             $this->userModel->updateUserLevel(+1,$_SESSION['user_id']);
           }
 
           // Return Status alert abbr_status('L' OR 'O' OR 'D')
-          $status = abbr_status($sql_status);
+          $status = abbr_status($sql_status,@$prize);
 
           $show_result = result_diff($random_result_array,$submitted_numbers_array);
           foreach($submitted_numbers_array as $check_win)
-          {
+            {
 
-          }
+            }
 
-            $message['result'] = $show_result;
-            $message['status'] = $status;
-            $message['sound'] =  $sql_status;
-
+              $message['result'] = $show_result;
+              $message['status'] = $status;
+              $message['sound'] =  $sql_status;
          }
+            
+
+          $hints = json_decode($ticket->hints,true);
+          $submitted = json_decode(string_to_json(@$_POST['numbers']), true);
+          $random = json_decode($ticket->result,true);
+
+          $hints_array = make_hints_array(@$submitted,$random,$hints);
+
+          $hints = json_encode($hints_array);
+          
+
+          $message['hints'] = hintsPicker($hints_array, $ticket->winners);
+          
+          $user = $this->userModel->getUserById($_SESSION['user_id']);
+
+          $message['new_score'] = $user->score;
+          $message['new_level'] = $user->level;
 
 
           echo json_encode($message);
 
+
+        $ticket = $this->ticketModel->updatePlayedTicketsByPackSerial(@$ticket->pack_serial,$hints);
 
         if(!$this->ticketModel->updateTicket(@$submitted_numbers,@$_POST['num'],$random_result,$sql_status))
         {

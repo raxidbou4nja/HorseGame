@@ -30,11 +30,12 @@ class Ticket {
     }
 
     //register new user
-    public function purchaseTickets($winners,$result, $pack){
-        $this->db->query('INSERT INTO tickets (userid, winners, result, pack) VALUES (:userid,:winners, :result, :pack)');
+    public function purchaseTickets($winners,$result, $pack_serial, $pack){
+        $this->db->query('INSERT INTO tickets (userid, winners, result, pack_serial, pack) VALUES (:userid,:winners, :result, :pack_serial, :pack)');
         $this->db->bind(':userid', $_SESSION['user_id']);
         $this->db->bind(':winners', $winners);
         $this->db->bind(':result', $result);
+        $this->db->bind(':pack_serial', $pack_serial);
         $this->db->bind(':pack', $pack);
 
         if($this->db->execute()){
@@ -153,7 +154,7 @@ class Ticket {
 
     public function getTicketsByWinners($winners){
 
-        $this->db->query('SELECT * FROM tickets WHERE winners = :winners AND userid = :userid ORDER BY status ASC LIMIT 5');
+        $this->db->query('SELECT * FROM tickets WHERE winners = :winners AND userid = :userid ORDER BY status ASC');
         $this->db->bind(':winners', $winners);
         $this->db->bind(':userid', $_SESSION['user_id']);
 
@@ -168,7 +169,7 @@ class Ticket {
 
     public function getHistoryTicketsByWinners($winners){
 
-        $this->db->query('SELECT * FROM tickets WHERE winners = :winners AND userid = :userid ORDER BY status ASC LIMIT 5');
+        $this->db->query('SELECT * FROM tickets WHERE winners = :winners AND userid = :userid ORDER BY id DESC LIMIT 50');
         $this->db->bind(':winners', $winners);
         $this->db->bind(':userid', $_SESSION['user_id']);
 
@@ -215,6 +216,20 @@ class Ticket {
         return $this->db->rowCount();
 
     }
+
+
+    public function updatePlayedTicketsByPackSerial($pack_serial,$hints){
+        $this->db->query('UPDATE tickets SET played = played+1, hints = :hints WHERE pack_serial = :pack_serial AND userid = :userid');
+        $this->db->bind(':pack_serial', $pack_serial);
+        $this->db->bind(':hints', $hints);
+        $this->db->bind(':userid', $_SESSION['user_id']);
+
+        if($this->db->execute()){
+            return true;
+        }else{
+            return false;
+        }
+        }
 
     //delete a Compte
     public function SoftDeleteUser($id){

@@ -23,13 +23,13 @@
       <div class="col-md-3 d-flex p-3">
        Your level:
        <div class="data-output">
-          <?php echo $data['info']->level; ?>
+          <span id="new_level"><?php echo $data['info']->level; ?></span>
       </div>
     </div>
     <div class="col-md-3  d-flex p-3">
        Your Credits:
        <div class="data-output">
-          $<?php echo $data['info']->score; ?>.00
+          $<span id="new_score"><?php echo $data['info']->score; ?></span>.00
       </div>
     </div>
     <div class="col-md-3 text-center p-3">

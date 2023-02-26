@@ -8,7 +8,7 @@
         <div class="spinner diagonal part-1"></div>
         <div class="spinner horizontal"></div>
         <div class="spinner diagonal part-2"></div>
-      <div class="brand">GAME</div>
+      <div class="brand text-dark"><a href="<?php echo URLROOT; ?>">GAME</a></div>
   </label>
   
   <div id="sidebarMenu">

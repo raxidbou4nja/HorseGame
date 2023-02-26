@@ -7,6 +7,20 @@ html, body {
 a:hover {
   text-decoration:none;
 }
+
+.headline {
+    font-size: 3rem;
+}
+.headline::before,
+.headline::after {
+    display: inline-block;
+    content: "";
+    border-top: .3rem solid black;
+    width: 4rem;
+    margin: 0 1rem;
+    transform: translateY(-1rem);
+}
+
 #brandhead{
   z-index: 1001;
 }
@@ -31,6 +45,9 @@ a:hover {
   font-family: HP Simplified;
   font-size: 53px;
   font-weight: bolder;
+  background: #ffffff4d;
+  border-radius: 20px;
+  width: fit-content;
 }
 .bg-bronze{
     background-color: #c7a079;
@@ -71,8 +88,8 @@ a:hover {
 .header {
 
 margin: 0 auto;
-width: 100%;
-max-width: 100%;
+width: 98%;
+max-width: 98%;
 box-shadow: none;
 background-color: White;
 position: absolute;
@@ -195,6 +212,9 @@ left: 46px;
 font-weight: bold;
 font-size: 48px;
 }
+.brand a{
+color: black;
+}
 
 .openSidebarMenu:checked ~ .sidebarIconToggle > .horizontal {
 transition: all 0.3s;
@@ -239,6 +259,7 @@ transform: translateX(100%)  !important;
         text-align: center;
         font-size: 25px !important;
         font-weight: bold;
+        cursor: pointer;
       }
       .ticket-result div {
         width: 50px;
@@ -248,8 +269,9 @@ transform: translateX(100%)  !important;
         font-size: 25px;
         font-weight: bold;
         color: white;
-        line-height: 45px;
+        line-height: 50px;
         margin:2px;
+        cursor: pointer;
       }
       .prize-head {
         width: fit-content;
