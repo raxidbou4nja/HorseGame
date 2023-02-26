@@ -9,7 +9,8 @@
       <li style="margin-left: 76px; font-size: 40px">GAMES</li>
       <li><a href="<?php echo URLROOT; ?>/users"><i class="fa fa-gamepad fa-2x"></i> Games List</a></li>
       <li><a href="<?php echo URLROOT; ?>/users/profile"><i class="fa fa-user fa-2x"></i> Profile</a></li>
-      <li><a href="<?php echo URLROOT; ?>/users/deposit"><i class="fa fa-dollar fa-2x"></i> Deposit</a></li>    
+      <li><a href="<?php echo URLROOT; ?>/users/deposit"><i class="fa fa-dollar fa-2x"></i> Deposit</a></li>
+      <li><a href="<?php echo URLROOT; ?>/pages/how_to_play"><i class="fa fa-gamepad "></i> How To Play</a></li>    
   </ul>
 </div>
 <nav class="navbar shadow profile-navbar row">

@@ -10,4 +10,10 @@
       }
       $this->view('pages/index');
     }
+    public function how_to_play(){
+      if(isLoggedIn()){
+        redirect('users');
+      }
+      $this->view('pages/how_to_play');
+    }
   }

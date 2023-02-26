@@ -16,6 +16,7 @@
       <li style="height: 100px;"></li>
       <li><a href="<?php echo URLROOT; ?>/users/login"><i class="fa fa-sign-in"></i> Login</a></li>
       <li><a href="<?php echo URLROOT; ?>/users/register"><i class="fa fa-user-plus "></i> Register</a></li>
+      <li><a href="<?php echo URLROOT; ?>/pages/how_to_play"><i class="fa fa-gamepad "></i> How To Play</a></li>
     </ul>
   </div>
        

@@ -10,9 +10,19 @@
     				<img src="<?php echo URLROOT; ?>/img/index2.png" width="100%">
     			</div>
     			<div class="font-italic mt-2">
-    				<a href="<?php echo URLROOT; ?>/users/register" class="btn btn-font-bronze m-2">Register</a>
-    				<a href="<?php echo URLROOT; ?>/users/login" class="btn btn-font-bronze m-2">Login</a>
-    			</div>
+    				<a href="<?php echo URLROOT; ?>/users/register" class="btn btn-font-bronze m-2">
+                        <i class="fa fa-user-plus"></i>
+                        Register
+                    </a>
+    				<a href="<?php echo URLROOT; ?>/users/login" class="btn btn-font-bronze m-2">
+                        <i class="fa fa-user"></i>
+                        Login
+                     </a>
+                    <a href="<?php echo URLROOT; ?>/pages/how_to_play" class="btn btn-font-bronze m-2">
+                        <i class="fa fa-gamepad"></i>
+                        How To Play
+                     </a>
+                </div>
     		</div>
     	</div>
     </div>
