@@ -77,7 +77,7 @@ class Users extends Controller{
 
 
             //make sure error are empty
-            if(empty($data['name_err'])  && empty($data['email_err']) && empty($data['password_err']) && empty($data['comfirm_password_err']) && @$_POST['check_terms'] != "1" ){
+            if(empty($data['name_err'])  && empty($data['email_err']) && empty($data['password_err']) && empty($data['comfirm_password_err']) && @$_POST['check_terms'] == "1" ){
                 $data['password'] = $data['password'];
                 if($this->userModel->register($data)){
                     flash('register_success', 'you are registerd you can login now');
