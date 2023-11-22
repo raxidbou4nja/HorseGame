@@ -1,6 +1,3 @@
-Your project structure and explanation look good! Below is an updated `README.md` with some minor adjustments and formatting improvements:
-
-```markdown
 ## Getting Started
 
 To get started with this application, you need to have PHP and a web server (such as Apache) installed on your machine. Follow these steps:
@@ -66,7 +63,3 @@ The model classes in the `models` directory represent the data and business logi
 ## Views
 
 The view files in the `views` directory display the data to the user. They are responsible for generating the HTML and CSS that make up the user interface. Views receive data from the controller and use it to dynamically generate the HTML that is sent to the user's browser.
-
-```
-
-Feel free to customize it further based on your specific project details.
