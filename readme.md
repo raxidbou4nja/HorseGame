@@ -4,10 +4,10 @@ To get started with this application, you need to have PHP and a web server (suc
 
 ```bash
 git clone https://github.com/raxidbou4nja/HorseGame.git
-cd smvc
+cd HorseGame
 ```
 
-Import the file `mvc.sql` from the `/db_file` folder to your database. Connect your project to the database by editing `app/config/config.php`:
+Import the file `***.sql` from the `/db_file` folder to your database. Connect your project to the database by editing `app/config/config.php`:
 
 ```php
 // DB Params
@@ -50,7 +50,7 @@ The application is structured according to the MVC pattern. The `index.php` file
 
 ## Routing
 
-The `index.php` file defines the routing logic for the application. It reads the URL of the incoming request and determines which controller and method to call based on the URL. For example, a request to `http://localhost/user/edit/1` would be routed to the `UserController` and the `edit` method with a parameter of 1.
+The `index.php` file defines the routing logic for the application. It reads the URL of the incoming request and determines which controller and method to call based on the URL.
 
 ## Controllers
 
