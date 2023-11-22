@@ -1,1 +1,1 @@
-Terssi Project For horse racing Game
+Project For horse racing Game
